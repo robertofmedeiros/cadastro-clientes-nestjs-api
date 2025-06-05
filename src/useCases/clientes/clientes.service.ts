@@ -1,0 +1,64 @@
+import { BadRequestException, Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Clientes } from 'src/model/clientes.entity';
+import { Repository } from 'typeorm';
+
+@Injectable()
+export class ClientesService {
+    private readonly logger = new Logger(ClientesService.name, { timestamp: true });
+
+    constructor(
+        @InjectRepository(Clientes)
+        private readonly clientesRepository: Repository<Clientes>
+    ) {}
+
+    async create (cliente: Clientes) {
+        this.logger.log(cliente);
+
+        return this.clientesRepository.save(cliente);
+    }
+
+    async update (id: number, cliente: Clientes) {
+        cliente.id = id;
+        const clienteResult = await this.clientesRepository.preload({
+            ...cliente,
+        });
+
+        if(!clienteResult) {
+            throw new BadRequestException('Cliente não encontrada');
+        }
+
+        return this.clientesRepository.save(clienteResult);
+    }
+
+    async findAll () {
+        const clientesList = await this.clientesRepository.find({
+            order: {
+                id: 'desc',
+            }
+        });
+
+        return clientesList;
+    }
+
+    async findById (id: number) {
+        const clienteResult = await this.clientesRepository.findOneBy({
+            id,
+        });
+
+        if(!clienteResult) {
+            throw new BadRequestException('Cliente não encontrado');
+        }
+
+        return clienteResult;
+    }
+
+    async remove (id: number) {
+        const clienteResult = await this.findById(id);
+        if(!clienteResult) {
+            throw new BadRequestException('Cliente não encontrado');
+        }
+
+        return this.clientesRepository.delete(id);
+    }
+}
