@@ -34,7 +34,7 @@ export class ClientesService {
     async findAll () {
         const clientesList = await this.clientesRepository.find({
             order: {
-                id: 'desc',
+                id: 'ASC',
             }
         });
 

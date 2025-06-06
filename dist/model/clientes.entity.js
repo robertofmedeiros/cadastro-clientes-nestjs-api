@@ -16,6 +16,7 @@ let Clientes = class Clientes {
     nome;
     sobrenome;
     email;
+    documento;
 };
 exports.Clientes = Clientes;
 __decorate([
@@ -34,6 +35,10 @@ __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], Clientes.prototype, "email", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ default: null }),
+    __metadata("design:type", String)
+], Clientes.prototype, "documento", void 0);
 exports.Clientes = Clientes = __decorate([
     (0, typeorm_1.Entity)()
 ], Clientes);

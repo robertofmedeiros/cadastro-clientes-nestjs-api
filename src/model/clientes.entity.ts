@@ -13,4 +13,7 @@ export class Clientes {
 
     @Column()
     email: string;
+
+    @Column({default: null})
+    documento?: string;
 }

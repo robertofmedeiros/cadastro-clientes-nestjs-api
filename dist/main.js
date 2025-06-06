@@ -8,6 +8,10 @@ async function bootstrap() {
         logger: new common_1.ConsoleLogger({
             json: true,
         }),
+        cors: {
+            origin: '*',
+            methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+        },
     });
     await app.listen(process.env.PORT ?? 3000);
 }

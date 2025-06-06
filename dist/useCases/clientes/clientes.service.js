@@ -41,7 +41,7 @@ let ClientesService = ClientesService_1 = class ClientesService {
     async findAll() {
         const clientesList = await this.clientesRepository.find({
             order: {
-                id: 'desc',
+                id: 'ASC',
             }
         });
         return clientesList;

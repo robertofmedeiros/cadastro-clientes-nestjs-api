@@ -3,4 +3,5 @@ export declare class Clientes {
     nome: string;
     sobrenome: string;
     email: string;
+    documento?: string;
 }
