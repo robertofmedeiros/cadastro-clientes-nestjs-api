@@ -15,6 +15,7 @@ import { ClientesModule } from './useCases/clientes/clientes.module';
       password: 'Rc601034@',
       autoLoadEntities: true, // Carrega entidades sem precisar especifica-las
       synchronize: true, // Sincroniza com o BD. Não deve ser usado em produção
+      logging: true,
     }),
     ClientesModule,
   ],

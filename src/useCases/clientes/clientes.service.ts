@@ -15,20 +15,25 @@ export class ClientesService {
     async create (cliente: Clientes) {
         this.logger.log(cliente);
 
-        return this.clientesRepository.save(cliente);
+        return await this.clientesRepository.save(cliente);
     }
 
     async update (id: number, cliente: Clientes) {
-        cliente.id = id;
-        const clienteResult = await this.clientesRepository.preload({
-            ...cliente,
-        });
 
+        const clienteResult = await this.findById(id);
         if(!clienteResult) {
-            throw new BadRequestException('Cliente não encontrada');
+            throw new BadRequestException('Cliente não encontrado');
         }
 
-        return this.clientesRepository.save(clienteResult);
+        cliente.id = id;
+
+        await this.clientesRepository
+            .createQueryBuilder()
+            .update(Clientes)
+            .set(cliente)
+            .where("id = :id", { id })
+            .execute();
+        return await this.findById(id);
     }
 
     async findAll () {
@@ -59,6 +64,6 @@ export class ClientesService {
             throw new BadRequestException('Cliente não encontrado');
         }
 
-        return this.clientesRepository.delete(id);
+        return await this.clientesRepository.delete(id);
     }
 }

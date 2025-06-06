@@ -26,17 +26,21 @@ let ClientesService = ClientesService_1 = class ClientesService {
     }
     async create(cliente) {
         this.logger.log(cliente);
-        return this.clientesRepository.save(cliente);
+        return await this.clientesRepository.save(cliente);
     }
     async update(id, cliente) {
-        cliente.id = id;
-        const clienteResult = await this.clientesRepository.preload({
-            ...cliente,
-        });
+        const clienteResult = await this.findById(id);
         if (!clienteResult) {
-            throw new common_1.BadRequestException('Cliente não encontrada');
+            throw new common_1.BadRequestException('Cliente não encontrado');
         }
-        return this.clientesRepository.save(clienteResult);
+        cliente.id = id;
+        await this.clientesRepository
+            .createQueryBuilder()
+            .update(clientes_entity_1.Clientes)
+            .set(cliente)
+            .where("id = :id", { id })
+            .execute();
+        return await this.findById(id);
     }
     async findAll() {
         const clientesList = await this.clientesRepository.find({
@@ -60,7 +64,7 @@ let ClientesService = ClientesService_1 = class ClientesService {
         if (!clienteResult) {
             throw new common_1.BadRequestException('Cliente não encontrado');
         }
-        return this.clientesRepository.delete(id);
+        return await this.clientesRepository.delete(id);
     }
 };
 exports.ClientesService = ClientesService;

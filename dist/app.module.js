@@ -27,6 +27,7 @@ exports.AppModule = AppModule = __decorate([
                 password: 'Rc601034@',
                 autoLoadEntities: true,
                 synchronize: true,
+                logging: true,
             }),
             clientes_module_1.ClientesModule,
         ],
